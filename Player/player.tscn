@@ -4,41 +4,50 @@
 script/source = "extends CharacterBody3D
 
 
-const SPEED = 5.0
-const JUMP_VELOCITY = 4.5
-lerp_val = 20
+@export var speed = 5.0
+@export var jump_vel = 4.5
+@export var lerp_val = 20
+@export var mouse_sense = 0.15
+
+@onready var pivot = $Pivot
+@onready var camera_3d = $Camera3D
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting(\"physics/3d/default_gravity\")
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
+	
 func _physics_process(delta):
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 
 	# Handle Jump.
-	if Input.is_action_just_pressed(\"jumps\") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+	if Input.is_action_just_pressed(\"jump\") and is_on_floor():
+		velocity.y = jump_vel
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir = Input.get_vector(\"leftward\", \"rightward\", \"forward\", \"backward\")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+		velocity.x = direction.x * speed
+		velocity.z = direction.z * speed
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+		velocity.x = move_toward(velocity.x, 0, speed)
+		velocity.z = move_toward(velocity.z, 0, speed)
 	
 	if direction != Vector3.ZERO:
 		direction = direction.normalized()
 		pivot.rotation.y = lerp_angle(pivot.rotation.y, atan2(-velocity.x, -velocity.z), delta * lerp_val)
 
 	move_and_slide()
+
+func _input(event):
+	if event is InputEventMouseMotion:
+		rotate_y(deg_to_rad(-event.relative.x * mouse_sense))
+		camera_3d.rotate_x(deg_to_rad(-event.relative.y * mouse_sense))
 "
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_i8irb"]
@@ -58,10 +67,5 @@ skeleton = NodePath("../..")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_xpt0j")
 
-[node name="SpringArm3D" type="SpringArm3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
-spring_length = 3.0
-margin = 0.2
-
-[node name="Camera3D" type="Camera3D" parent="SpringArm3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0428798, 3.24514)
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.910749, 0.412961, 0, -0.412961, 0.910749, 0, 1.78719, 4.41682)

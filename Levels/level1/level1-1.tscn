@@ -1,12 +1,32 @@
-[gd_scene load_steps=4 format=3 uid="uid://dbv6qmajr27el"]
+[gd_scene load_steps=7 format=3 uid="uid://dbv6qmajr27el"]
 
 [ext_resource type="PackedScene" uid="uid://pjwsorepbum0" path="res://Player/player.tscn" id="1_ncuuo"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_uoy4x"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_eksoc"]
+sky_material = SubResource("ProceduralSkyMaterial_uoy4x")
+
+[sub_resource type="Environment" id="Environment_4obpc"]
+background_mode = 2
+sky = SubResource("Sky_eksoc")
+tonemap_mode = 2
+glow_enabled = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_o6cqs"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_b7vjk"]
 
 [node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_4obpc")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(24.1366, 0, 0, 0, 0.371231, 0, 0, 0, 24.1366, 0, 0, 0)
