@@ -12,7 +12,10 @@ sky_material = SubResource("ProceduralSkyMaterial_uoy4x")
 [sub_resource type="Environment" id="Environment_4obpc"]
 background_mode = 2
 sky = SubResource("Sky_eksoc")
-tonemap_mode = 2
+tonemap_mode = 3
+ssr_enabled = true
+ssao_enabled = true
+ssil_enabled = true
 glow_enabled = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_o6cqs"]
