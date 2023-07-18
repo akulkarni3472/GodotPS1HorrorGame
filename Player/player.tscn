@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://pjwsorepbum0"]
+[gd_scene load_steps=5 format=3 uid="uid://pjwsorepbum0"]
 
 [sub_resource type="GDScript" id="GDScript_nbx6h"]
 script/source = "extends CharacterBody3D
@@ -6,18 +6,22 @@ script/source = "extends CharacterBody3D
 
 @export var speed = 5.0
 @export var jump_vel = 4.5
-@export var lerp_val = 20
+@export var lerp_val = 0.2
 @export var mouse_sense = 0.15
 
-@onready var pivot = $Pivot
-@onready var body = $Pivot/Body
-@onready var spring_arm = $SpringArm3D
+var direction
+
+@onready var body = $Body
+@onready var camera_3d = $Camera3D
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting(\"physics/3d/default_gravity\")
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
+func _process(delta):
+	direction = Vector3.ZERO
 	
 func _physics_process(delta):
 	# Add the gravity.
@@ -31,56 +35,44 @@ func _physics_process(delta):
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir = Input.get_vector(\"leftward\", \"rightward\", \"forward\", \"backward\")
-	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
 		velocity.x = direction.x * speed
 		velocity.z = direction.z * speed
 	else:
-		velocity.x = move_toward(velocity.x, 0, speed)
-		velocity.z = move_toward(velocity.z, 0, speed)
+		velocity.x = lerp(velocity.x, 0.0, lerp_val)
+		velocity.z = lerp(velocity.z, 0.0, lerp_val)
 	
 	if direction != Vector3.ZERO:
-		direction = direction.normalized()
-		body.rotation.y = lerp_angle(body.rotation.y, atan2(-velocity.x, -velocity.z), delta * lerp_val)
-
+		body.rotation.y = lerp_angle(body.rotation.y, atan2(-velocity.x, -velocity.z), lerp_val)
 	move_and_slide()
 
 func _input(event):
 	if event is InputEventMouseMotion:
 		rotate_y(deg_to_rad(-event.relative.x * mouse_sense))
-		spring_arm.rotate_x(deg_to_rad(-event.relative.y * mouse_sense))
-		spring_arm.rotation.x = clamp(spring_arm.rotation.x, -90, 50)
+		camera_3d.rotate_x(deg_to_rad(-event.relative.y * mouse_sense))
+		camera_3d.rotation.x = clamp(camera_3d.rotation.x, deg_to_rad(-89), deg_to_rad(89))
 "
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_i8irb"]
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_7fjlg"]
+[sub_resource type="PrismMesh" id="PrismMesh_jf3ot"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xpt0j"]
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_xi3ri"]
 
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = SubResource("GDScript_nbx6h")
 
-[node name="Pivot" type="Node3D" parent="."]
-
-[node name="Body" type="MeshInstance3D" parent="Pivot"]
+[node name="Body" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_i8irb")
-skeleton = NodePath("../..")
 
-[node name="Nose" type="MeshInstance3D" parent="Pivot/Body"]
-transform = Transform3D(0.308819, 0, 0, 0, 0.154409, -0.267445, 0, 0.267445, 0.154409, 0, 0.415832, -0.399595)
-mesh = SubResource("CapsuleMesh_7fjlg")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(0.365, 0, 0, 0, -1.59547e-08, 0.365, 0, -0.365, -1.59547e-08, 0, 0.490536, -1.31346)
+mesh = SubResource("PrismMesh_jf3ot")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_xpt0j")
 
-[node name="SpringArm3D" type="SpringArm3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 0, 0.5, 0)
-shape = SubResource("SphereShape3D_xi3ri")
-spring_length = 5.0
-margin = 0.2
-
-[node name="Camera3D" type="Camera3D" parent="SpringArm3D"]
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
