@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://pjwsorepbum0"]
+[gd_scene load_steps=6 format=3 uid="uid://pjwsorepbum0"]
 
 [sub_resource type="GDScript" id="GDScript_nbx6h"]
 script/source = "extends CharacterBody3D
@@ -10,7 +10,8 @@ script/source = "extends CharacterBody3D
 @export var mouse_sense = 0.15
 
 @onready var pivot = $Pivot
-@onready var camera_3d = $Camera3D
+@onready var body = $Pivot/Body
+@onready var spring_arm = $SpringArm3D
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting(\"physics/3d/default_gravity\")
@@ -40,19 +41,24 @@ func _physics_process(delta):
 	
 	if direction != Vector3.ZERO:
 		direction = direction.normalized()
-		pivot.rotation.y = lerp_angle(pivot.rotation.y, atan2(-velocity.x, -velocity.z), delta * lerp_val)
+		body.rotation.y = lerp_angle(body.rotation.y, atan2(-velocity.x, -velocity.z), delta * lerp_val)
 
 	move_and_slide()
 
 func _input(event):
 	if event is InputEventMouseMotion:
 		rotate_y(deg_to_rad(-event.relative.x * mouse_sense))
-		camera_3d.rotate_x(deg_to_rad(-event.relative.y * mouse_sense))
+		spring_arm.rotate_x(deg_to_rad(-event.relative.y * mouse_sense))
+		spring_arm.rotation.x = clamp(spring_arm.rotation.x, -90, 50)
 "
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_i8irb"]
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_7fjlg"]
+
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xpt0j"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_xi3ri"]
 
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -60,12 +66,21 @@ script = SubResource("GDScript_nbx6h")
 
 [node name="Pivot" type="Node3D" parent="."]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Pivot"]
+[node name="Body" type="MeshInstance3D" parent="Pivot"]
 mesh = SubResource("CapsuleMesh_i8irb")
 skeleton = NodePath("../..")
+
+[node name="Nose" type="MeshInstance3D" parent="Pivot/Body"]
+transform = Transform3D(0.308819, 0, 0, 0, 0.154409, -0.267445, 0, 0.267445, 0.154409, 0, 0.415832, -0.399595)
+mesh = SubResource("CapsuleMesh_7fjlg")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_xpt0j")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.910749, 0.412961, 0, -0.412961, 0.910749, 0, 1.78719, 4.41682)
+[node name="SpringArm3D" type="SpringArm3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 0, 0.5, 0)
+shape = SubResource("SphereShape3D_xi3ri")
+spring_length = 5.0
+margin = 0.2
+
+[node name="Camera3D" type="Camera3D" parent="SpringArm3D"]
