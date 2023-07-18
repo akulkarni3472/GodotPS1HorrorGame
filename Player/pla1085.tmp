@@ -5,9 +5,6 @@ script/source = "extends CharacterBody3D
 
 @export var speed := 8.0
 @export var jump_vel := 5.0
-@export var distance_footsteps := 0.0
-@export var play_footstep := 2
-@export var sprint_multiplier := 1.75
 @export var lerp_val := 0.2
 @export var mouse_sense := 0.15
 @export var cam_bob_speed := 10
@@ -17,7 +14,8 @@ script/source = "extends CharacterBody3D
 
 var direction := Vector3.ZERO
 var _delta := 0.0
-var is_running = false
+var distance_footsteps := 0.0
+var play_footstep := 1
 var gravity = ProjectSettings.get_setting(\"physics/3d/default_gravity\")
 
 @onready var pivot = $Pivot
@@ -28,13 +26,7 @@ var gravity = ProjectSettings.get_setting(\"physics/3d/default_gravity\")
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
-func _process(delta):
-	if Input.is_action_just_pressed(\"run\"):
-		is_running = true
-	if Input.is_action_just_released(\"run\"):
-		is_running = false
-
+	
 func _physics_process(delta):
 	if floor_detect_rc.is_colliding():
 		var group = floor_detect_rc.get_collider().get_parent().get_groups()[0]
@@ -59,12 +51,9 @@ func move(delta):
 	direction.x = Input.get_action_strength(\"rightward\") - Input.get_action_strength(\"leftward\")
 	direction.z = Input.get_action_strength(\"backward\") - Input.get_action_strength(\"forward\")
 	direction = direction.rotated(Vector3.UP, y_rotation).normalized()
-	
-	var actual_speed = speed * sprint_multiplier if is_running else speed
-	
 	if direction:
-		velocity.x = direction.x * actual_speed
-		velocity.z = direction.z * actual_speed
+		velocity.x = direction.x * speed
+		velocity.z = direction.z * speed
 	else:
 		velocity.x = lerp(velocity.x, 0.0, lerp_val)
 		velocity.z = lerp(velocity.z, 0.0, lerp_val)
@@ -82,20 +71,11 @@ func process_ground_sounds(group: String):
 	if play_footstep != 100 and (int(velocity.x) != 0 or int(velocity.z) !=0):
 		distance_footsteps += 0.1
 	
-	play_footstep = 1 if is_running else 2.0
-		
 	if distance_footsteps > play_footstep and is_on_floor():
 		match group:
 			\"WoodTerrain\":
 				footstep_player.stream = load(\"res://Assets/footsteps/wood/1.ogg\")
-			\"MetalTerrain\":
-				footstep_player.stream = load(\"res://Assets/footsteps/metal/1.ogg\")
-			\"GrassTerrain\":
-				footstep_player.stream = load(\"res://Assets/footsteps/grass/1.ogg\")
-		footstep_player.pitch_scale = randf_range(0.8, 1.2)
-		footstep_player.play()
-		distance_footsteps = 0.0
-
+	
 func _input(event):
 	if event is InputEventMouseMotion:
 		rotate_y(deg_to_rad(-event.relative.x * mouse_sense))
@@ -107,7 +87,9 @@ func _input(event):
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xpt0j"]
 
-[sub_resource type="AudioStream" id="AudioStream_jg5xj"]
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_cnfnl"]
+playback_mode = 1
+random_pitch = 2.29
 
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -133,5 +115,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.00051, 0)
 collision_mask = 7
 
 [node name="FootstepPlayer" type="AudioStreamPlayer3D" parent="."]
-stream = SubResource("AudioStream_jg5xj")
+stream = SubResource("AudioStreamRandomizer_cnfnl")
+attenuation_model = 2
+volume_db = 10.0
 max_db = 2.0
+autoplay = true
