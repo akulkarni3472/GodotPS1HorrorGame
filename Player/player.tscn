@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://pjwsorepbum0"]
+[gd_scene load_steps=4 format=3 uid="uid://pjwsorepbum0"]
 
 [sub_resource type="GDScript" id="GDScript_nbx6h"]
 script/source = "extends CharacterBody3D
@@ -11,7 +11,7 @@ script/source = "extends CharacterBody3D
 
 var direction = Vector3.ZERO
 
-@onready var body = $Body
+@onready var pivot = $Pivot
 @onready var camera_3d = $Camera3D
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -22,9 +22,7 @@ func _ready():
 	
 func _physics_process(delta):
 	apply_gravity(delta)
-	jump()
 	move()
-
 
 func _input(event):
 	if event is InputEventMouseMotion:
@@ -41,24 +39,23 @@ func jump():
 		velocity.y = jump_vel
 
 func move():
+	jump()
+	var y_rot = global_transform.basis.get_euler().y
 	direction.x = Input.get_action_strength(\"rightward\") - Input.get_action_strength(\"leftward\")
 	direction.z = Input.get_action_strength(\"backward\") - Input.get_action_strength(\"forward\")
+	direction = direction.rotated(Vector3.UP, y_rot).normalized()
 	if direction:
 		velocity.x = direction.x * speed
 		velocity.z = direction.z * speed
 	else:
 		velocity.x = lerp(velocity.x, 0.0, lerp_val)
 		velocity.z = lerp(velocity.z, 0.0, lerp_val)
-	
-	if direction != Vector3.ZERO:
-		body.rotation.y = lerp_angle(body.rotation.y, atan2(-velocity.x, -velocity.z), lerp_val)
+	pivot.rotation.y = lerp_angle(pivot.rotation.y, atan2(-velocity.x, -velocity.z), lerp_val)
 	move_and_slide()
 	
 "
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_i8irb"]
-
-[sub_resource type="PrismMesh" id="PrismMesh_jf3ot"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xpt0j"]
 
@@ -66,12 +63,13 @@ func move():
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = SubResource("GDScript_nbx6h")
 
-[node name="Body" type="MeshInstance3D" parent="."]
-mesh = SubResource("CapsuleMesh_i8irb")
+[node name="Pivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Body"]
-transform = Transform3D(0.365, 0, 0, 0, -1.59547e-08, 0.365, 0, -0.365, -1.59547e-08, 0, 0.490536, -1.31346)
-mesh = SubResource("PrismMesh_jf3ot")
+[node name="Body" type="MeshInstance3D" parent="Pivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_i8irb")
+skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_xpt0j")
