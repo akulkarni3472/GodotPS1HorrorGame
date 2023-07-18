@@ -3,17 +3,16 @@
 [sub_resource type="GDScript" id="GDScript_nbx6h"]
 script/source = "extends CharacterBody3D
 
+
 @export var speed := 5.0
 @export var jump_vel := 4.5
 @export var lerp_val := 0.2
 @export var mouse_sense := 0.15
-@export var cam_bob_speed = 8
-@export var breathe_speed = 0.5
-@export var cam_bob_up_down = 1
-@export var breathe_in_out = 0.05
 
 var direction = Vector3.ZERO
 var _delta = 0.0
+var cam_bob_speed = 10
+var cam_bob_up_down = 1
 
 @onready var pivot = $Pivot
 @onready var camera_3d = $Camera3D
@@ -63,8 +62,8 @@ func move(delta):
 		cam_bob = floor(abs(direction.z) + abs(direction.x)) * _delta * cam_bob_speed
 		obj_cam = orig_cam_pos + Vector3.UP * sin(cam_bob) * cam_bob_up_down
 	else:
-		cam_bob = floor(abs(1) + abs(1)) * _delta * breathe_speed
-		obj_cam = orig_cam_pos + Vector3.UP * sin(cam_bob) * cam_bob_up_down * breathe_in_out
+		cam_bob = floor(abs(1) + abs(1)) * _delta * 0.5
+		obj_cam = orig_cam_pos + Vector3.UP * sin(cam_bob) * cam_bob_up_down
 	camera_3d.position = camera_3d.position.lerp(obj_cam, delta)
 	move_and_slide()
 "
@@ -75,7 +74,6 @@ func move(delta):
 
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-collision_mask = 6
 script = SubResource("GDScript_nbx6h")
 
 [node name="Pivot" type="Node3D" parent="."]
