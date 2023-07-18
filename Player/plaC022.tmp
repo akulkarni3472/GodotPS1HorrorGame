@@ -4,12 +4,12 @@
 script/source = "extends CharacterBody3D
 
 
-@export var speed := 5.0
-@export var jump_vel := 4.5
-@export var lerp_val := 0.2
-@export var mouse_sense := 0.15
+@export var speed = 5.0
+@export var jump_vel = 4.5
+@export var lerp_val = 0.2
+@export var mouse_sense = 0.15
 
-var direction = Vector3.ZERO
+var direction
 
 @onready var body = $Body
 @onready var camera_3d = $Camera3D
@@ -20,29 +20,23 @@ var gravity = ProjectSettings.get_setting(\"physics/3d/default_gravity\")
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
+func _process(delta):
+	direction = Vector3.ZERO
+	
 func _physics_process(delta):
-	apply_gravity(delta)
-	jump()
-	move()
-
-
-func _input(event):
-	if event is InputEventMouseMotion:
-		rotate_y(deg_to_rad(-event.relative.x * mouse_sense))
-		camera_3d.rotate_x(deg_to_rad(-event.relative.y * mouse_sense))
-		camera_3d.rotation.x = clamp(camera_3d.rotation.x, deg_to_rad(-89), deg_to_rad(89))
-
-func apply_gravity(delta):
+	# Add the gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 
-func jump():
+	# Handle Jump.
 	if Input.is_action_just_pressed(\"jump\") and is_on_floor():
 		velocity.y = jump_vel
 
-func move():
-	direction.x = Input.get_action_strength(\"rightward\") - Input.get_action_strength(\"leftward\")
-	direction.z = Input.get_action_strength(\"backward\") - Input.get_action_strength(\"forward\")
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
+	direction.x = Input.get_action_strength(\"leftward\") - Input.get_action_strength(\"rightward\")
+	direction.z = Input.get_action_strength(\"forward\") - Input.get_action_strength(\"backward\")
+	direction = (transform.basis * Vector3(direction.x, 0, input_dir.y)).normalized()
 	if direction:
 		velocity.x = direction.x * speed
 		velocity.z = direction.z * speed
@@ -53,7 +47,12 @@ func move():
 	if direction != Vector3.ZERO:
 		body.rotation.y = lerp_angle(body.rotation.y, atan2(-velocity.x, -velocity.z), lerp_val)
 	move_and_slide()
-	
+
+func _input(event):
+	if event is InputEventMouseMotion:
+		rotate_y(deg_to_rad(-event.relative.x * mouse_sense))
+		camera_3d.rotate_x(deg_to_rad(-event.relative.y * mouse_sense))
+		camera_3d.rotation.x = clamp(camera_3d.rotation.x, deg_to_rad(-89), deg_to_rad(89))
 "
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_i8irb"]
@@ -65,6 +64,10 @@ func move():
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = SubResource("GDScript_nbx6h")
+speed = null
+jump_vel = null
+lerp_val = null
+mouse_sense = null
 
 [node name="Body" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_i8irb")
