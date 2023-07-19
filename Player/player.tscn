@@ -40,6 +40,7 @@ func _physics_process(delta):
 	if floor_detect_rc.is_colliding():
 		var group = floor_detect_rc.get_collider().get_parent().get_groups()[0]
 		process_ground_sounds(group)
+	process_interact_raycast()
 	apply_gravity(delta)
 	move(delta)
 
@@ -79,12 +80,12 @@ func move(delta):
 	camera_3d.position = camera_3d.position.lerp(obj_cam, delta)
 	move_and_slide()
 
-func process_interact_raycast(delta):
-	var interacted_collider = interact_rc.get_collider()
-	if interacted_collider and \\
-	interacted_collider.is_in_group(\"Interactable\") and \\
-	interacted_collider.has_method(\"action_use\"):
-		interacted_collider.action_use()
+func process_interact_raycast():
+	var interacted = interact_rc.get_collider()
+	print(interacted)
+	if interacted != null and interacted.is_in_group(\"Interactable\") and interacted.has_method(\"action_use\"):
+		print(\"Colliding\")
+		interacted.action_use()
 
 func process_ground_sounds(group: String):
 	if play_footstep != 100 and (int(velocity.x) != 0 or int(velocity.z) !=0):
@@ -119,7 +120,8 @@ func _input(event):
 
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-collision_mask = 5
+collision_layer = 2
+collision_mask = 13
 script = SubResource("GDScript_nbx6h")
 
 [node name="Pivot" type="Node3D" parent="."]
@@ -137,8 +139,8 @@ shape = SubResource("CapsuleShape3D_xpt0j")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
 [node name="InteractRC" type="RayCast3D" parent="Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 0.978148, -0.207912, 0, 0.207912, 0.978148, 0, 0, 0)
-target_position = Vector3(0, -1, -5)
+target_position = Vector3(0, 0, -3)
+collide_with_areas = true
 
 [node name="FloorDetectRC" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.00051, 0)

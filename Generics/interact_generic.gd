@@ -12,4 +12,4 @@ func _process(delta):
 	pass
 
 func action_use():
-	pass
+	print("Interacting")

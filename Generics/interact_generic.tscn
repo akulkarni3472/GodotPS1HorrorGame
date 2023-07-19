@@ -2,11 +2,13 @@
 
 [ext_resource type="Script" path="res://Generics/interact_generic.gd" id="1_jf1dq"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_jmton"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_o8ggs"]
 
 [node name="Interact_Generic" type="Area3D" groups=["Interactable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+collision_layer = 15
+collision_mask = 15
 script = ExtResource("1_jf1dq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("BoxShape3D_jmton")
+shape = SubResource("BoxShape3D_o8ggs")
