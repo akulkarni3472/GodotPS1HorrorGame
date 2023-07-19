@@ -23,6 +23,7 @@ var gravity = ProjectSettings.get_setting(\"physics/3d/default_gravity\")
 @onready var pivot = $Pivot
 @onready var camera_3d = $Camera3D
 @onready var orig_cam_pos = camera_3d.position
+@onready var interact_rc = $Camera3D/InteractRC
 @onready var floor_detect_rc = $FloorDetectRC
 @onready var footstep_player = $FootstepPlayer
 
@@ -78,6 +79,13 @@ func move(delta):
 	camera_3d.position = camera_3d.position.lerp(obj_cam, delta)
 	move_and_slide()
 
+func process_interact_raycast(delta):
+	var interacted_collider = interact_rc.get_collider()
+	if interacted_collider and \\
+	interacted_collider.is_in_group(\"Interactable\") and \\
+	interacted_collider.has_method(\"action_use\"):
+		interacted_collider.action_use()
+
 func process_ground_sounds(group: String):
 	if play_footstep != 100 and (int(velocity.x) != 0 or int(velocity.z) !=0):
 		distance_footsteps += 0.1
@@ -126,7 +134,11 @@ skeleton = NodePath("../..")
 shape = SubResource("CapsuleShape3D_xpt0j")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.181698)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="InteractRC" type="RayCast3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 0.978148, -0.207912, 0, 0.207912, 0.978148, 0, 0, 0)
+target_position = Vector3(0, -1, -5)
 
 [node name="FloorDetectRC" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.00051, 0)
