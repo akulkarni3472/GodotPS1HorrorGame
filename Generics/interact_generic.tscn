@@ -6,8 +6,8 @@
 
 [node name="Interact_Generic" type="Area3D" groups=["Interactable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-collision_layer = 15
-collision_mask = 15
+collision_layer = 8
+collision_mask = 7
 script = ExtResource("1_jf1dq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

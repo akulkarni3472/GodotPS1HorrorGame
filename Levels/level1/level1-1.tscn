@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://dbv6qmajr27el"]
 
 [ext_resource type="PackedScene" uid="uid://pjwsorepbum0" path="res://Player/player.tscn" id="1_ncuuo"]
-[ext_resource type="PackedScene" uid="uid://cpqeih1h11fgb" path="res://Generics/interact_generic.tscn" id="2_b8gu3"]
+[ext_resource type="PackedScene" uid="uid://chmg73m5625wr" path="res://Interactables/interact_cube.tscn" id="2_8mgxf"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_uoy4x"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -37,6 +37,7 @@ transform = Transform3D(24.1366, 0, 0, 0, 0.371231, 0, 0, 0, 24.1366, 0, 0, 0)
 mesh = SubResource("BoxMesh_o6cqs")
 
 [node name="GroundSB3D" type="StaticBody3D" parent="Ground"]
+collision_mask = 7
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/GroundSB3D"]
 shape = SubResource("BoxShape3D_b7vjk")
@@ -46,6 +47,7 @@ transform = Transform3D(23.3142, -0.0960817, 0, 6.24701, 0.358582, 0, 0, 0, 24.1
 mesh = SubResource("BoxMesh_o6cqs")
 
 [node name="GroundSB3D" type="StaticBody3D" parent="Ground2"]
+collision_mask = 7
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground2/GroundSB3D"]
 shape = SubResource("BoxShape3D_b7vjk")
@@ -55,11 +57,14 @@ transform = Transform3D(24.1366, 7.45058e-09, 0, 1.84236e-06, 0.358582, 6.24701,
 mesh = SubResource("BoxMesh_o6cqs")
 
 [node name="GroundSB3D" type="StaticBody3D" parent="Ground3"]
+collision_mask = 11
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground3/GroundSB3D"]
 shape = SubResource("BoxShape3D_b7vjk")
 
 [node name="Player" parent="." instance=ExtResource("1_ncuuo")]
+collision_layer = 2
+collision_mask = 13
 
-[node name="Interact_Generic" parent="." instance=ExtResource("2_b8gu3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.45509, -3)
+[node name="Interact_Generic" parent="." instance=ExtResource("2_8mgxf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.77185, -3.32474)

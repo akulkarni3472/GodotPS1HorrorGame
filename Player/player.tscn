@@ -35,12 +35,12 @@ func _process(delta):
 		is_running = true
 	if Input.is_action_just_released(\"run\"):
 		is_running = false
+	process_interact_raycast()
 
 func _physics_process(delta):
 	if floor_detect_rc.is_colliding():
 		var group = floor_detect_rc.get_collider().get_parent().get_groups()[0]
 		process_ground_sounds(group)
-	process_interact_raycast()
 	apply_gravity(delta)
 	move(delta)
 
@@ -82,10 +82,11 @@ func move(delta):
 
 func process_interact_raycast():
 	var interacted = interact_rc.get_collider()
-	print(interacted)
-	if interacted != null and interacted.is_in_group(\"Interactable\") and interacted.has_method(\"action_use\"):
-		print(\"Colliding\")
-		interacted.action_use()
+	if Input.is_action_just_pressed(\"interact\"):
+		if interacted != null and \\
+		interacted.is_in_group(\"Interactable\") and \\
+		interacted.has_method(\"action_use\"):
+			interacted.action_use()
 
 func process_ground_sounds(group: String):
 	if play_footstep != 100 and (int(velocity.x) != 0 or int(velocity.z) !=0):
@@ -120,8 +121,8 @@ func _input(event):
 
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-collision_layer = 2
-collision_mask = 13
+collision_layer = 0
+collision_mask = 0
 script = SubResource("GDScript_nbx6h")
 
 [node name="Pivot" type="Node3D" parent="."]
@@ -140,6 +141,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
 [node name="InteractRC" type="RayCast3D" parent="Camera3D"]
 target_position = Vector3(0, 0, -3)
+collision_mask = 13
 collide_with_areas = true
 
 [node name="FloorDetectRC" type="RayCast3D" parent="."]
