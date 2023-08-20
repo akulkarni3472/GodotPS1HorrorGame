@@ -4,52 +4,59 @@
 height = 0.0930533
 radius = 0.350851
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_kjdm3"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gyhui"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_thfgp"]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_3aq1i"]
 
 [node name="Chain" type="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.24692, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.24692, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0420008, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.27535, 0)
 shape = SubResource("CylinderShape3D_hktv6")
 
-[node name="L1" type="RigidBody3D" parent="."]
-transform = Transform3D(0.110231, 0, 0, 0, 0.110231, 0, 0, 0, 0.110231, 0, -0.183148, 0)
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2772, 0)
+mass = 0.01
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="L1"]
-mesh = SubResource("CapsuleMesh_kjdm3")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+shape = SubResource("CapsuleShape3D_gyhui")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="L1"]
-shape = SubResource("CapsuleShape3D_thfgp")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D/CollisionShape3D"]
+mesh = SubResource("CapsuleMesh_3aq1i")
+skeleton = NodePath("../..")
 
-[node name="HingeJoint3D" type="PinJoint3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.289636, 0)
-node_a = NodePath("../L1")
-node_b = NodePath("../L2")
+[node name="Generic6DOFJoint3D" type="ConeTwistJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.17708, 0)
+node_a = NodePath("../RigidBody3D")
+node_b = NodePath("RigidBody3D2")
+swing_span = 3.14159
 
-[node name="L2" type="RigidBody3D" parent="."]
-transform = Transform3D(0.110231, 0, 0, 0, 0.110231, 0, 0, 0, 0.110231, 0, -0.38531, 0)
+[node name="RigidBody3D2" type="RigidBody3D" parent="Generic6DOFJoint3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.11498, 0)
+mass = 0.01
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="L2"]
-mesh = SubResource("CapsuleMesh_kjdm3")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Generic6DOFJoint3D/RigidBody3D2"]
+shape = SubResource("CapsuleShape3D_gyhui")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="L2"]
-shape = SubResource("CapsuleShape3D_thfgp")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Generic6DOFJoint3D/RigidBody3D2/CollisionShape3D"]
+mesh = SubResource("CapsuleMesh_3aq1i")
+skeleton = NodePath("../..")
 
-[node name="HingeJoint3D2" type="PinJoint3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.485965, 0)
-node_a = NodePath("../L2")
-node_b = NodePath("../L3")
+[node name="ConeTwistJoint3D" type="ConeTwistJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.882708, 0)
+node_a = NodePath("../Generic6DOFJoint3D/RigidBody3D2")
+node_b = NodePath("RigidBody3D3")
 
-[node name="L3" type="RigidBody3D" parent="."]
-transform = Transform3D(0.110231, 0, 0, 0, 0.110231, 0, 0, 0, 0.110231, 0, -0.590863, 0)
+[node name="RigidBody3D3" type="RigidBody3D" parent="ConeTwistJoint3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.255, 0)
+mass = 0.01
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="L3"]
-mesh = SubResource("CapsuleMesh_kjdm3")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ConeTwistJoint3D/RigidBody3D3"]
+shape = SubResource("CapsuleShape3D_gyhui")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="L3"]
-shape = SubResource("CapsuleShape3D_thfgp")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ConeTwistJoint3D/RigidBody3D3/CollisionShape3D"]
+mesh = SubResource("CapsuleMesh_3aq1i")
+skeleton = NodePath("../..")

@@ -102,6 +102,8 @@ func process_ground_sounds(group: String):
 				footstep_player.stream = load(\"res://Assets/footsteps/metal/1.ogg\")
 			\"GrassTerrain\":
 				footstep_player.stream = load(\"res://Assets/footsteps/grass/1.ogg\")
+			null:
+				footstep_player.stream = load(\"res://Assets/footsteps/wood/1.ogg\")
 		footstep_player.pitch_scale = randf_range(0.8, 1.2)
 		footstep_player.play()
 		distance_footsteps = 0.0

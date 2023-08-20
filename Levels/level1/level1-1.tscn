@@ -1,21 +1,20 @@
-[gd_scene load_steps=12 format=3 uid="uid://dbv6qmajr27el"]
+[gd_scene load_steps=11 format=3 uid="uid://dbv6qmajr27el"]
 
 [ext_resource type="Material" uid="uid://12ycflvcultr" path="res://Assets/Materials/marble.tres" id="1_fadnr"]
 [ext_resource type="Material" uid="uid://vsghakjvborr" path="res://Assets/Materials/wood_1.tres" id="1_ipggc"]
 [ext_resource type="PackedScene" uid="uid://pjwsorepbum0" path="res://Player/player.tscn" id="1_ncuuo"]
 [ext_resource type="PackedScene" uid="uid://chmg73m5625wr" path="res://Interactables/interact_cube.tscn" id="2_8mgxf"]
-[ext_resource type="PackedScene" uid="uid://deppblu8oh58d" path="res://Objects/chain.tscn" id="5_6jii3"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_uoy4x"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 
-[sub_resource type="Sky" id="Sky_eksoc"]
+[sub_resource type="Sky" id="Sky_sm3el"]
 sky_material = SubResource("ProceduralSkyMaterial_uoy4x")
 
 [sub_resource type="Environment" id="Environment_4obpc"]
 background_mode = 2
-sky = SubResource("Sky_eksoc")
+sky = SubResource("Sky_sm3el")
 tonemap_mode = 3
 ssr_enabled = true
 ssao_enabled = true
@@ -124,17 +123,9 @@ collision_mask = 11
 shape = SubResource("BoxShape3D_b7vjk")
 
 [node name="Player" parent="." instance=ExtResource("1_ncuuo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.540182)
 collision_layer = 2
 collision_mask = 13
 
 [node name="Interact_Generic" parent="." instance=ExtResource("2_8mgxf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.77185, -3.32474)
-
-[node name="SpotLight3D" type="SpotLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.25453, 3.33571, 0.427545)
-light_energy = 5.0
-shadow_enabled = true
-spot_range = 4.66126
-
-[node name="Root" parent="." instance=ExtResource("5_6jii3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.28769, -1.44415)

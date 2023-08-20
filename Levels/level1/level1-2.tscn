@@ -1,0 +1,109 @@
+[gd_scene load_steps=11 format=3 uid="uid://ciqa3wekh4nh8"]
+
+[ext_resource type="Material" uid="uid://12ycflvcultr" path="res://Assets/Materials/marble.tres" id="1_7q0h3"]
+[ext_resource type="PackedScene" uid="uid://pjwsorepbum0" path="res://Player/player.tscn" id="2_sdkh8"]
+[ext_resource type="Material" uid="uid://vsghakjvborr" path="res://Assets/Materials/wood_1.tres" id="3_bk8eh"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_31yxe"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_eksoc"]
+sky_material = SubResource("ProceduralSkyMaterial_31yxe")
+
+[sub_resource type="Environment" id="Environment_f3fnx"]
+background_mode = 2
+sky = SubResource("Sky_eksoc")
+tonemap_mode = 3
+ssr_enabled = true
+ssao_enabled = true
+ssil_enabled = true
+sdfgi_enabled = true
+sdfgi_use_occlusion = true
+sdfgi_bounce_feedback = 0.59
+sdfgi_min_cell_size = 10.2765
+glow_enabled = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_eg3oo"]
+material = ExtResource("1_7q0h3")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xgoju"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_uvyj0"]
+material = ExtResource("3_bk8eh")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lfecw"]
+
+[node name="level1-2" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_f3fnx")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.851179, -0.515922, 0.0965364, -0.0449435, 0.254887, 0.965926, -0.522948, 0.817837, -0.240142, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("2_sdkh8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22113, 0)
+collision_layer = 2
+collision_mask = 15
+
+[node name="Ground" type="MeshInstance3D" parent="." groups=["WoodTerrain"]]
+transform = Transform3D(23.322, 0, 0, 0, 0.358, 0, 0, 0, 23.322, 0, 0, 0)
+mesh = SubResource("BoxMesh_eg3oo")
+
+[node name="GroundSB3D" type="StaticBody3D" parent="Ground"]
+collision_mask = 7
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/GroundSB3D"]
+shape = SubResource("BoxShape3D_xgoju")
+
+[node name="Ground7" type="MeshInstance3D" parent="." groups=["WoodTerrain"]]
+transform = Transform3D(24.1366, 0, 0, 0, -1.6227e-08, -24.1366, 0, 0.371231, -1.05504e-06, 0, 12.0888, 11.4248)
+mesh = SubResource("BoxMesh_uvyj0")
+
+[node name="GroundSB3D" type="StaticBody3D" parent="Ground7"]
+collision_mask = 7
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground7/GroundSB3D"]
+shape = SubResource("BoxShape3D_lfecw")
+
+[node name="Ground8" type="MeshInstance3D" parent="." groups=["WoodTerrain"]]
+transform = Transform3D(24.1366, 0, 0, 0, -1.6227e-08, -24.1366, 0, 0.371231, -1.05504e-06, 0, 12.0888, -11.3024)
+mesh = SubResource("BoxMesh_uvyj0")
+
+[node name="GroundSB3D" type="StaticBody3D" parent="Ground8"]
+collision_mask = 7
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground8/GroundSB3D"]
+shape = SubResource("BoxShape3D_lfecw")
+
+[node name="Ground9" type="MeshInstance3D" parent="." groups=["WoodTerrain"]]
+transform = Transform3D(-1.05504e-06, 0.371231, -1.05504e-06, 0, -1.6227e-08, -24.1366, -24.1366, -1.6227e-08, 4.61174e-14, 11.4706, 12.0888, 0.0907354)
+mesh = SubResource("BoxMesh_uvyj0")
+
+[node name="GroundSB3D" type="StaticBody3D" parent="Ground9"]
+collision_mask = 7
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground9/GroundSB3D"]
+shape = SubResource("BoxShape3D_lfecw")
+
+[node name="Ground11" type="MeshInstance3D" parent="." groups=["WoodTerrain"]]
+transform = Transform3D(24.1366, 0, 0, 0, 0.371231, 0, 0, 0, 24.1366, -0.409142, 23.7237, 0.0834355)
+mesh = SubResource("BoxMesh_uvyj0")
+
+[node name="GroundSB3D" type="StaticBody3D" parent="Ground11"]
+collision_mask = 7
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground11/GroundSB3D"]
+shape = SubResource("BoxShape3D_lfecw")
+
+[node name="Ground10" type="MeshInstance3D" parent="." groups=["WoodTerrain"]]
+transform = Transform3D(-1.05504e-06, 0.371231, -1.05504e-06, 0, -1.6227e-08, -24.1366, -24.1366, -1.6227e-08, 4.61174e-14, -11.583, 12.0888, 0.0907354)
+mesh = SubResource("BoxMesh_uvyj0")
+
+[node name="GroundSB3D" type="StaticBody3D" parent="Ground10"]
+collision_mask = 7
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground10/GroundSB3D"]
+shape = SubResource("BoxShape3D_lfecw")
