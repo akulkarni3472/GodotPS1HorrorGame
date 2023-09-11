@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://ciqa3wekh4nh8"]
+[gd_scene load_steps=12 format=3 uid="uid://ciqa3wekh4nh8"]
 
 [ext_resource type="Material" uid="uid://12ycflvcultr" path="res://Assets/Materials/marble.tres" id="1_7q0h3"]
 [ext_resource type="PackedScene" uid="uid://pjwsorepbum0" path="res://Player/player.tscn" id="2_sdkh8"]
 [ext_resource type="Material" uid="uid://vsghakjvborr" path="res://Assets/Materials/wood_1.tres" id="3_bk8eh"]
+[ext_resource type="PackedScene" uid="uid://bj0i323a1e5xm" path="res://Blender Models/low_poly_bed.glb" id="4_0lyi6"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_31yxe"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -47,6 +48,9 @@ shadow_enabled = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22113, 0)
 collision_layer = 2
 collision_mask = 15
+
+[node name="low_poly_bed" parent="." instance=ExtResource("4_0lyi6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.163728, -5.33745)
 
 [node name="Ground" type="MeshInstance3D" parent="." groups=["WoodTerrain"]]
 transform = Transform3D(23.322, 0, 0, 0, 0.358, 0, 0, 0, 23.322, 0, 0, 0)
