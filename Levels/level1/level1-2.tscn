@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://ciqa3wekh4nh8"]
+[gd_scene load_steps=13 format=3 uid="uid://ciqa3wekh4nh8"]
 
 [ext_resource type="Material" uid="uid://12ycflvcultr" path="res://Assets/Materials/marble.tres" id="1_7q0h3"]
 [ext_resource type="PackedScene" uid="uid://pjwsorepbum0" path="res://Player/player.tscn" id="2_sdkh8"]
 [ext_resource type="Material" uid="uid://vsghakjvborr" path="res://Assets/Materials/wood_1.tres" id="3_bk8eh"]
 [ext_resource type="PackedScene" uid="uid://bj0i323a1e5xm" path="res://Blender Models/low_poly_bed.glb" id="4_0lyi6"]
+[ext_resource type="PackedScene" uid="uid://cc5o7mu5yn1u5" path="res://Objects/chain.tscn" id="5_oyiwc"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_31yxe"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -111,3 +112,6 @@ collision_mask = 7
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground10/GroundSB3D"]
 shape = SubResource("BoxShape3D_lfecw")
+
+[node name="Chain" parent="." instance=ExtResource("5_oyiwc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.41773, -2)

@@ -1,0 +1,79 @@
+[gd_scene load_steps=6 format=3 uid="uid://cc5o7mu5yn1u5"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_yu5ua"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_euwp3"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_poyuk"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_xlte1"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_g51es"]
+height = 2.01193
+radius = 4.19824
+
+[node name="Chain" type="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.41773, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.59812, 0)
+shape = SubResource("SphereShape3D_yu5ua")
+
+[node name="ConeTwistJoint3D" type="ConeTwistJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.58162, 0)
+node_a = NodePath("..")
+node_b = NodePath("../RigidBody3D")
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.60333, 0)
+mass = 0.01
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+shape = SubResource("CapsuleShape3D_euwp3")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
+mesh = SubResource("CapsuleMesh_poyuk")
+
+[node name="ConeTwistJoint3D2" type="ConeTwistJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.999985, 0.00548031, 0, -0.00548031, 0.999985, 0, 2.55879, 0)
+node_a = NodePath("../RigidBody3D")
+node_b = NodePath("../RigidBody3D2")
+
+[node name="RigidBody3D2" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.65283, 0)
+mass = 0.01
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D2"]
+shape = SubResource("CapsuleShape3D_euwp3")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D2"]
+mesh = SubResource("CapsuleMesh_poyuk")
+
+[node name="ConeTwistJoint3D3" type="ConeTwistJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.653003, 0)
+node_a = NodePath("../RigidBody3D2")
+node_b = NodePath("../RigidBody3D3")
+
+[node name="RigidBody3D3" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.342252, 0)
+mass = 0.01
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D3"]
+shape = SubResource("CapsuleShape3D_euwp3")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D3"]
+mesh = SubResource("CapsuleMesh_poyuk")
+
+[node name="RigidBody3D" type="Area3D" parent="RigidBody3D3"]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="RigidBody3D3/RigidBody3D"]
+transform = Transform3D(2, 0, 0, 0, 0.25, 0, 0, 0, 2, 0, -1.10272, 0)
+mesh = SubResource("CylinderMesh_xlte1")
+skeleton = NodePath("../..")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="RigidBody3D3/RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, -5.46392e-09, 1, 0, -1, -5.46392e-09, 0, -1.10272, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D3/RigidBody3D"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, -1.09608, 0)
+shape = SubResource("CylinderShape3D_g51es")
