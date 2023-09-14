@@ -79,3 +79,4 @@ interact={
 3d_physics/layer_2="player"
 3d_physics/layer_3="enemy"
 3d_physics/layer_4="interactable"
+3d_physics/layer_5="objects"

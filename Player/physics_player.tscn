@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://dyc8xnrv6r3r0"]
+
+[ext_resource type="Script" path="res://Player/physics_player.gd" id="1_47fdk"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ctqs6"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_mulys"]
+
+[node name="Physics_Player" type="RigidBody3D"]
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+script = ExtResource("1_47fdk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_ctqs6")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_mulys")

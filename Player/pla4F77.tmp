@@ -14,7 +14,7 @@ script/source = "extends CharacterBody3D
 @export var cam_bob_up_down := 1
 @export var breathe_speed := 0.5
 @export var breathe_in_out := 0.1
-@export var push_force := .05
+@export var push_force := 80.0
 
 var direction := Vector3.ZERO
 var _delta := 0.0
